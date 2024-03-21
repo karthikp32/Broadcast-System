@@ -1,3 +1,4 @@
+sudo apt update
 sudo apt install openjdk-17-jre
 sudo apt install openjdk-17-jdk
 sudo apt-get install -y gnuplot
