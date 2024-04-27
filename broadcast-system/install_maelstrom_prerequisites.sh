@@ -1,5 +1,5 @@
-sudo apt update
-sudo apt install openjdk-17-jre
-sudo apt install openjdk-17-jdk
+sudo apt-get update
+sudo apt-get install -y openjdk-17-jre
+sudo apt-get install -y openjdk-17-jdk
 sudo apt-get install -y gnuplot
-sudo apt install graphviz
+sudo apt-get install -y graphviz
