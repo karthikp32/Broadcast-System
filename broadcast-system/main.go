@@ -1,10 +1,12 @@
 package main
 
 import (
-	// "encoding/json"
-	"encoding/json"
 	"log"
+	"encoding/json"
 	maelstrom "github.com/jepsen-io/maelstrom/demo/go"
+	"slices"
+	"strings"
+	"fmt"
 )
 
 var broadcastedValues []any
@@ -44,28 +46,44 @@ func read(n *maelstrom.Node) {
 	})
 }
 
+func removeCurrNodeFromNeighborNodes(neighborNodes []string, n *maelstrom.Node) []string {
+	for idx, neighborNode := range neighborNodes {
+		if strings.Compare(neighborNode, n.ID()) == 0 {
+			neighborNodes[idx] = neighborNodes[len(neighborNodes)-1] 
+			neighborNodes = neighborNodes[:len(neighborNodes)-1]
+		} 
+	}
+	return neighborNodes
+}
+
 func topology(n *maelstrom.Node) {
 	n.Handle("topology", func(msg maelstrom.Message) error {
-		var requestBody map[string]any
-		var topology map[string]string 
-
-		if err := json.Unmarshal(msg.Body, &requestBody); err != nil {
-			return err
-		}
-		
+		requestBody := make(map[string]any)
+		neighborNodes = n.NodeIDs()
+		neighborNodes = removeCurrNodeFromNeighborNodes(neighborNodes, n)
 		requestBody["type"] = "topology_ok"
-		topology = requestBody["topology"].(map[string]string)
-		neighborNodes = append(neighborNodes, topology[n.ID()])
-		requestBody["topology"] = nil
-
 		return n.Reply(msg, requestBody)
 	})
 }
 
 
+func removeCurrNodeFromNeighborNodes_unitTest(n *maelstrom.Node) {
+	n.Init("n0", []string{"n1", "n2"})
+	fmt.Println(n.ID())
+
+	neighborNodes = removeCurrNodeFromNeighborNodes(neighborNodes, n)
+	fmt.Println(neighborNodes)
+	if slices.Contains(neighborNodes, n.ID()) {
+		fmt.Println("removeCurrNodeFromNeighborNodes_unitTest failed")
+	}
+}
+
 func main() {
 
+	neighborNodes = []string{"n0", "n1", "n2"}
+
 	n := maelstrom.NewNode()
+	removeCurrNodeFromNeighborNodes_unitTest(n)
 
 	broadcast(n)
 	read(n)

@@ -1,0 +1,15 @@
+2024/05/12 16:50:44 Received {c0 n0 {"type":"init","node_id":"n0","node_ids":["n0"],"msg_id":1}}
+2024/05/12 16:50:44 Node n0 initialized
+2024/05/12 16:50:44 Sent {"src":"n0","dest":"c0","body":{"in_reply_to":1,"type":"init_ok"}}
+2024/05/12 16:50:44 Received {c1 n0 {"type":"topology","topology":{"n0":[]},"msg_id":1}}
+panic: interface conversion: interface {} is map[string]interface {}, not map[string]string
+
+goroutine 18 [running]:
+main.main.topology.func3({{0xc0000123a0, 0x2}, {0xc0000123a2, 0x2}, {0xc00001c480, 0x33, 0x40}})
+	/workspaces/Broadcast-System/broadcast-system/main.go:57 +0x2ad
+github.com/jepsen-io/maelstrom/demo/go.(*Node).handleMessage(0xc0000a8000, 0x0?, {{0xc0000123a0, 0x2}, {0xc0000123a2, 0x2}, {0xc00001c480, 0x33, 0x40}})
+	/go/pkg/mod/github.com/jepsen-io/maelstrom/demo/go@v0.0.0-20240408130303-0186f398f965/node.go:151 +0x8d
+github.com/jepsen-io/maelstrom/demo/go.(*Node).Run.func2()
+	/go/pkg/mod/github.com/jepsen-io/maelstrom/demo/go@v0.0.0-20240408130303-0186f398f965/node.go:129 +0x7d
+created by github.com/jepsen-io/maelstrom/demo/go.(*Node).Run in goroutine 1
+	/go/pkg/mod/github.com/jepsen-io/maelstrom/demo/go@v0.0.0-20240408130303-0186f398f965/node.go:127 +0x4f8
