@@ -16,16 +16,13 @@ var neighborNodes []string
 func broadcast(n *maelstrom.Node) {
 	n.Handle("broadcast", func(msg maelstrom.Message) error {
 		var requestBody map[string]any
-
+		responseBody := make(map[string]any)
 		if err := json.Unmarshal(msg.Body, &requestBody); err != nil {
 			return err
 		}
-
-		requestBody["type"] = "broadcast_ok"
+		responseBody["type"] = "broadcast_ok"
 		broadcastedValues = append(broadcastedValues, requestBody["message"])
-		requestBody["message"] = nil
-
-		return n.Reply(msg, requestBody)
+		return n.Reply(msg, responseBody)
 	})
 }
 
@@ -33,12 +30,9 @@ func broadcast(n *maelstrom.Node) {
 func read(n *maelstrom.Node) {
 	n.Handle("read", func(msg maelstrom.Message) error {
 		var requestBody map[string]any
-
-
 		if err := json.Unmarshal(msg.Body, &requestBody); err != nil {
 			return err
 		}
-		
 		requestBody["type"] = "read_ok"
 		requestBody["messages"] = broadcastedValues
 
@@ -69,10 +63,7 @@ func topology(n *maelstrom.Node) {
 
 func removeCurrNodeFromNeighborNodes_unitTest(n *maelstrom.Node) {
 	n.Init("n0", []string{"n1", "n2"})
-	fmt.Println(n.ID())
-
 	neighborNodes = removeCurrNodeFromNeighborNodes(neighborNodes, n)
-	fmt.Println(neighborNodes)
 	if slices.Contains(neighborNodes, n.ID()) {
 		fmt.Println("removeCurrNodeFromNeighborNodes_unitTest failed")
 	}
