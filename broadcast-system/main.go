@@ -13,6 +13,7 @@ var broadcastedValues []any
 var neighborNodes []string
 
 
+
 func broadcast(n *maelstrom.Node) {
 	n.Handle("broadcast", func(msg maelstrom.Message) error {
 		var requestBody map[string]any
@@ -20,9 +21,45 @@ func broadcast(n *maelstrom.Node) {
 		if err := json.Unmarshal(msg.Body, &requestBody); err != nil {
 			return err
 		}
+		secondOrderbroadcastMessageToNeighborNodes(n, requestBody)
 		responseBody["type"] = "broadcast_ok"
 		broadcastedValues = append(broadcastedValues, requestBody["message"])
 		return n.Reply(msg, responseBody)
+	})
+}
+
+
+func secondOrderbroadcastMessageToNeighborNodes(n *maelstrom.Node, requestBody map[string]any) {
+	secondOrderRequestBody := make(map[string]any)
+	secondOrderRequestBody["type"] = "second-order-broadcast"
+	secondOrderRequestBody["message"] = requestBody["message"]
+	neighborNodes = n.NodeIDs()
+	neighborNodes = removeCurrNodeFromNeighborNodes(neighborNodes, n)
+	for _, neighborNode := range neighborNodes {
+		n.Send(neighborNode, secondOrderRequestBody)
+	}
+}
+
+func secondOrderBroadcast(n *maelstrom.Node) {
+	n.Handle("second-order-broadcast", func(msg maelstrom.Message) error {
+		var requestBody map[string]any
+		responseBody := make(map[string]any)
+		if err := json.Unmarshal(msg.Body, &requestBody); err != nil {
+			return err
+		}
+		responseBody["type"] = "second_order_broadcast_ok"
+		broadcastedValues = append(broadcastedValues, requestBody["message"])
+		return n.Reply(msg, responseBody)
+	})
+}
+
+func secondOrderBroadcastOk(n *maelstrom.Node) {
+	n.Handle("second_order_broadcast_ok", func(msg maelstrom.Message) error {
+		var requestBody map[string]any
+		if err := json.Unmarshal(msg.Body, &requestBody); err != nil {
+			return err
+		}
+		return nil
 	})
 }
 
@@ -76,9 +113,12 @@ func main() {
 	n := maelstrom.NewNode()
 	removeCurrNodeFromNeighborNodes_unitTest(n)
 
-	broadcast(n)
-	read(n)
 	topology(n)
+	broadcast(n)
+	secondOrderBroadcast(n)
+	secondOrderBroadcastOk(n)
+	read(n)
+
 
 	if err := n.Run(); err != nil {
 		log.Fatal(err)

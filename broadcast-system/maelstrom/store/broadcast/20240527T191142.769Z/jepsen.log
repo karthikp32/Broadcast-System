@@ -1,0 +1,366 @@
+2024-05-27 19:11:42,818{GMT}	INFO	[jepsen test runner] jepsen.core: Test version 31744692f8b8b810776b22774484fed7774393df (plus uncommitted changes)
+2024-05-27 19:11:42,819{GMT}	INFO	[jepsen test runner] jepsen.core: Command line:
+lein run test -w broadcast --bin /go/bin/broadcast --node-count 5 --time-limit 20 --rate 10
+2024-05-27 19:11:42,928{GMT}	INFO	[jepsen test runner] jepsen.core: Running test:
+{:args []
+ :remote
+ #jepsen.control.retry.Remote{:remote #jepsen.control.scp.Remote{:cmd-remote #jepsen.control.sshj.SSHJRemote{:concurrency-limit 6,
+                                                                                                             :conn-spec nil,
+                                                                                                             :client nil,
+                                                                                                             :semaphore nil},
+                                                                 :conn-spec nil},
+                              :conn nil}
+ :log-net-send false
+ :node-count 5
+ :availability nil
+ :max-txn-length 4
+ :concurrency 5
+ :db
+ #object[maelstrom.db$db$reify__16142
+         "0x41d1bcbd"
+         "maelstrom.db$db$reify__16142@41d1bcbd"]
+ :max-writes-per-key 16
+ :leave-db-running? false
+ :name "broadcast"
+ :logging-json? false
+ :start-time
+ #object[org.joda.time.DateTime "0x24a696c0" "2024-05-27T19:11:42.769Z"]
+ :nemesis-interval 10
+ :net
+ #object[maelstrom.net$jepsen_net$reify__15251
+         "0x78fb4f7f"
+         "maelstrom.net$jepsen_net$reify__15251@78fb4f7f"]
+ :client
+ #object[maelstrom.workload.broadcast$client$reify__16644
+         "0x6a7c1725"
+         "maelstrom.workload.broadcast$client$reify__16644@6a7c1725"]
+ :barrier
+ #object[java.util.concurrent.CyclicBarrier
+         "0x756476a3"
+         "java.util.concurrent.CyclicBarrier@756476a3"]
+ :log-stderr false
+ :pure-generators true
+ :ssh {:dummy? true}
+ :rate 10.0
+ :checker
+ #object[jepsen.checker$compose$reify__11881
+         "0x65e4ee59"
+         "jepsen.checker$compose$reify__11881@65e4ee59"]
+ :argv
+ ("test"
+  "-w"
+  "broadcast"
+  "--bin"
+  "/go/bin/broadcast"
+  "--node-count"
+  "5"
+  "--time-limit"
+  "20"
+  "--rate"
+  "10")
+ :nemesis
+ (jepsen.nemesis.ReflCompose
+  {:fm {:start-partition 0,
+        :stop-partition 0,
+        :kill 1,
+        :start 1,
+        :pause 1,
+        :resume 1},
+   :nemeses [#unprintable "jepsen.nemesis.combined$partition_nemesis$reify__16416@4746d52d"
+             #unprintable "jepsen.nemesis.combined$db_nemesis$reify__16397@4d0927df"]})
+ :nodes ["n0" "n1" "n2" "n3" "n4"]
+ :test-count 1
+ :latency {:mean 0, :dist :constant}
+ :bin "/go/bin/broadcast"
+ :generator
+ ((jepsen.generator.Synchronize
+   {:gen (jepsen.generator.TimeLimit
+          {:limit 20000000000,
+           :cutoff nil,
+           :gen (jepsen.generator.Any
+                 {:gens [(jepsen.generator.OnThreads
+                          {:f #{:nemesis},
+                           :context-filter #object[jepsen.generator.context$make_thread_filter$lazy_filter__9167
+                                                   "0x7e86ff3b"
+                                                   "jepsen.generator.context$make_thread_filter$lazy_filter__9167@7e86ff3b"],
+                           :gen nil})
+                         (jepsen.generator.OnThreads
+                          {:f #jepsen.generator.context.AllBut{:element :nemesis},
+                           :context-filter #object[jepsen.generator.context$make_thread_filter$lazy_filter__9167
+                                                   "0x4936dca9"
+                                                   "jepsen.generator.context$make_thread_filter$lazy_filter__9167@4936dca9"],
+                           :gen (jepsen.generator.Stagger
+                                 {:dt 200000000,
+                                  :next-time nil,
+                                  :gen (jepsen.generator.Mix
+                                        {:i 0,
+                                         :gens [({:f :broadcast, :value 0}
+                                                 {:f :broadcast, :value 1}
+                                                 {:f :broadcast, :value 2}
+                                                 {:f :broadcast, :value 3}
+                                                 {:f :broadcast, :value 4}
+                                                 {:f :broadcast, :value 5}
+                                                 {:f :broadcast, :value 6}
+                                                 {:f :broadcast, :value 7}
+                                                 ...)
+                                                ({:f :read}
+                                                 {:f :read}
+                                                 {:f :read}
+                                                 {:f :read}
+                                                 {:f :read}
+                                                 {:f :read}
+                                                 {:f :read}
+                                                 {:f :read}
+                                                 ...)]})})})]})})})
+  (jepsen.generator.Synchronize
+   {:gen (jepsen.generator.OnThreads
+          {:f #{:nemesis},
+           :context-filter #object[jepsen.generator.context$make_thread_filter$lazy_filter__9167
+                                   "0x56de370d"
+                                   "jepsen.generator.context$make_thread_filter$lazy_filter__9167@56de370d"],
+           :gen ()})})
+  (jepsen.generator.Synchronize
+   {:gen {:type :log, :value "Waiting for recovery..."}})
+  (jepsen.generator.Synchronize {:gen {:type :sleep, :value 10}})
+  (jepsen.generator.Synchronize
+   {:gen (jepsen.generator.OnThreads
+          {:f #jepsen.generator.context.AllBut{:element :nemesis},
+           :context-filter #object[jepsen.generator.context$make_thread_filter$lazy_filter__9167
+                                   "0x1f6865ca"
+                                   "jepsen.generator.context$make_thread_filter$lazy_filter__9167@1f6865ca"],
+           :gen (jepsen.generator.EachThread
+                 {:fresh-gen {:f :read, :final? true},
+                  :context-filters #object[clojure.core$promise$reify__8591
+                                           "0x6044311a"
+                                           {:status :pending, :val nil}],
+                  :gens {}})})}))
+ :log-net-recv false
+ :os
+ #object[maelstrom.net$jepsen_os$reify__15254
+         "0x7416b560"
+         "maelstrom.net$jepsen_os$reify__15254@7416b560"]
+ :time-limit 20
+ :workload :broadcast
+ :consistency-models [:strict-serializable]
+ :topology :grid}
+
+2024-05-27 19:11:45,531{GMT}	INFO	[jepsen node n0] maelstrom.net: Starting Maelstrom network
+2024-05-27 19:11:45,532{GMT}	INFO	[jepsen test runner] jepsen.db: Tearing down DB
+2024-05-27 19:11:45,536{GMT}	INFO	[jepsen test runner] jepsen.db: Setting up DB
+2024-05-27 19:11:45,537{GMT}	INFO	[jepsen node n1] maelstrom.db: Setting up n1
+2024-05-27 19:11:45,538{GMT}	INFO	[jepsen node n1] maelstrom.process: launching /go/bin/broadcast []
+2024-05-27 19:11:45,541{GMT}	INFO	[jepsen node n2] maelstrom.db: Setting up n2
+2024-05-27 19:11:45,541{GMT}	INFO	[jepsen node n2] maelstrom.process: launching /go/bin/broadcast []
+2024-05-27 19:11:45,547{GMT}	INFO	[jepsen node n0] maelstrom.service: Starting services: (lin-kv lin-tso lww-kv seq-kv)
+2024-05-27 19:11:45,550{GMT}	INFO	[jepsen node n3] maelstrom.db: Setting up n3
+2024-05-27 19:11:45,551{GMT}	INFO	[jepsen node n3] maelstrom.process: launching /go/bin/broadcast []
+2024-05-27 19:11:45,550{GMT}	INFO	[jepsen node n4] maelstrom.db: Setting up n4
+2024-05-27 19:11:45,554{GMT}	INFO	[jepsen node n4] maelstrom.process: launching /go/bin/broadcast []
+2024-05-27 19:11:45,561{GMT}	INFO	[jepsen node n0] maelstrom.db: Setting up n0
+2024-05-27 19:11:45,562{GMT}	INFO	[jepsen node n0] maelstrom.process: launching /go/bin/broadcast []
+2024-05-27 19:11:45,664{GMT}	INFO	[jepsen test runner] jepsen.core: Relative time begins now
+2024-05-27 19:11:45,758{GMT}	INFO	[jepsen worker 0] jepsen.util: 0	:invoke	:broadcast	0
+2024-05-27 19:11:45,764{GMT}	WARN	[n0 stdout] maelstrom.process: Error!
+clojure.lang.ExceptionInfo: Node n0 printed a line to STDOUT which was not well-formed JSON:
+neighborNodes are[n4 n1 n2 n3]{"src":"n0","dest":"n4","body":{"type":"broadcast","message":0,"msg_id":1}}
+Did you mean to encode this line as JSON? Or was this line intended for STDERR? See doc/protocol.md for more guidance.
+	at slingshot.support$stack_trace.invoke(support.clj:201)
+	at maelstrom.process$parse_msg$fn__15856.invoke(process.clj:47)
+	at maelstrom.process$parse_msg.invokeStatic(process.clj:45)
+	at maelstrom.process$parse_msg.invoke(process.clj:35)
+	at maelstrom.process$stdout_thread$fn__15878$fn__15879$fn__15881.invoke(process.clj:146)
+	at maelstrom.process$stdout_thread$fn__15878$fn__15879.invoke(process.clj:146)
+	at maelstrom.process$stdout_thread$fn__15878.invoke(process.clj:140)
+	at clojure.core$binding_conveyor_fn$fn__5823.invoke(core.clj:2047)
+	at clojure.lang.AFn.call(AFn.java:18)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1128)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:628)
+	at java.base/java.lang.Thread.run(Thread.java:829)
+2024-05-27 19:11:45,816{GMT}	INFO	[jepsen worker 1] jepsen.util: 1	:invoke	:read	nil
+2024-05-27 19:11:45,820{GMT}	INFO	[jepsen worker 1] jepsen.util: 1	:ok	:read	nil
+2024-05-27 19:11:45,859{GMT}	INFO	[jepsen worker 2] jepsen.util: 2	:invoke	:broadcast	1
+2024-05-27 19:11:45,867{GMT}	WARN	[n2 stdout] maelstrom.process: Error!
+clojure.lang.ExceptionInfo: Node n2 printed a line to STDOUT which was not well-formed JSON:
+neighborNodes are[n0 n1 n4 n3]{"src":"n2","dest":"n0","body":{"type":"broadcast","message":1,"msg_id":1}}
+Did you mean to encode this line as JSON? Or was this line intended for STDERR? See doc/protocol.md for more guidance.
+	at slingshot.support$stack_trace.invoke(support.clj:201)
+	at maelstrom.process$parse_msg$fn__15856.invoke(process.clj:47)
+	at maelstrom.process$parse_msg.invokeStatic(process.clj:45)
+	at maelstrom.process$parse_msg.invoke(process.clj:35)
+	at maelstrom.process$stdout_thread$fn__15878$fn__15879$fn__15881.invoke(process.clj:146)
+	at maelstrom.process$stdout_thread$fn__15878$fn__15879.invoke(process.clj:146)
+	at maelstrom.process$stdout_thread$fn__15878.invoke(process.clj:140)
+	at clojure.core$binding_conveyor_fn$fn__5823.invoke(core.clj:2047)
+	at clojure.lang.AFn.call(AFn.java:18)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1128)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:628)
+	at java.base/java.lang.Thread.run(Thread.java:829)
+2024-05-27 19:11:45,917{GMT}	INFO	[jepsen worker 3] jepsen.util: 3	:invoke	:read	nil
+2024-05-27 19:11:45,921{GMT}	INFO	[jepsen worker 3] jepsen.util: 3	:ok	:read	nil
+2024-05-27 19:11:46,045{GMT}	INFO	[jepsen worker 4] jepsen.util: 4	:invoke	:read	nil
+2024-05-27 19:11:46,056{GMT}	INFO	[jepsen worker 4] jepsen.util: 4	:ok	:read	nil
+2024-05-27 19:11:46,168{GMT}	INFO	[jepsen worker 1] jepsen.util: 1	:invoke	:read	nil
+2024-05-27 19:11:46,171{GMT}	INFO	[jepsen worker 1] jepsen.util: 1	:ok	:read	nil
+2024-05-27 19:11:46,176{GMT}	INFO	[jepsen worker 1] jepsen.util: 1	:invoke	:read	nil
+2024-05-27 19:11:46,180{GMT}	INFO	[jepsen worker 1] jepsen.util: 1	:ok	:read	nil
+2024-05-27 19:11:46,196{GMT}	INFO	[jepsen worker 1] jepsen.util: 1	:invoke	:broadcast	2
+2024-05-27 19:11:46,199{GMT}	WARN	[n1 stdout] maelstrom.process: Error!
+clojure.lang.ExceptionInfo: Node n1 printed a line to STDOUT which was not well-formed JSON:
+neighborNodes are[n0 n4 n2 n3]{"src":"n1","dest":"n0","body":{"type":"broadcast","message":2,"msg_id":4}}
+Did you mean to encode this line as JSON? Or was this line intended for STDERR? See doc/protocol.md for more guidance.
+	at slingshot.support$stack_trace.invoke(support.clj:201)
+	at maelstrom.process$parse_msg$fn__15856.invoke(process.clj:47)
+	at maelstrom.process$parse_msg.invokeStatic(process.clj:45)
+	at maelstrom.process$parse_msg.invoke(process.clj:35)
+	at maelstrom.process$stdout_thread$fn__15878$fn__15879$fn__15881.invoke(process.clj:146)
+	at maelstrom.process$stdout_thread$fn__15878$fn__15879.invoke(process.clj:146)
+	at maelstrom.process$stdout_thread$fn__15878.invoke(process.clj:140)
+	at clojure.core$binding_conveyor_fn$fn__5823.invoke(core.clj:2047)
+	at clojure.lang.AFn.call(AFn.java:18)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1128)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:628)
+	at java.base/java.lang.Thread.run(Thread.java:829)
+2024-05-27 19:11:46,365{GMT}	INFO	[jepsen worker 3] jepsen.util: 3	:invoke	:broadcast	3
+2024-05-27 19:11:46,369{GMT}	WARN	[n3 stdout] maelstrom.process: Error!
+clojure.lang.ExceptionInfo: Node n3 printed a line to STDOUT which was not well-formed JSON:
+neighborNodes are[n0 n1 n2 n4]{"src":"n3","dest":"n0","body":{"type":"broadcast","message":3,"msg_id":2}}
+Did you mean to encode this line as JSON? Or was this line intended for STDERR? See doc/protocol.md for more guidance.
+	at slingshot.support$stack_trace.invoke(support.clj:201)
+	at maelstrom.process$parse_msg$fn__15856.invoke(process.clj:47)
+	at maelstrom.process$parse_msg.invokeStatic(process.clj:45)
+	at maelstrom.process$parse_msg.invoke(process.clj:35)
+	at maelstrom.process$stdout_thread$fn__15878$fn__15879$fn__15881.invoke(process.clj:146)
+	at maelstrom.process$stdout_thread$fn__15878$fn__15879.invoke(process.clj:146)
+	at maelstrom.process$stdout_thread$fn__15878.invoke(process.clj:140)
+	at clojure.core$binding_conveyor_fn$fn__5823.invoke(core.clj:2047)
+	at clojure.lang.AFn.call(AFn.java:18)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1128)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:628)
+	at java.base/java.lang.Thread.run(Thread.java:829)
+2024-05-27 19:11:46,537{GMT}	INFO	[jepsen worker 4] jepsen.util: 4	:invoke	:read	nil
+2024-05-27 19:11:46,540{GMT}	INFO	[jepsen worker 4] jepsen.util: 4	:ok	:read	nil
+2024-05-27 19:11:46,560{GMT}	INFO	[jepsen worker 4] jepsen.util: 4	:invoke	:broadcast	4
+2024-05-27 19:11:46,562{GMT}	WARN	[n4 stdout] maelstrom.process: Error!
+clojure.lang.ExceptionInfo: Node n4 printed a line to STDOUT which was not well-formed JSON:
+neighborNodes are[n0 n1 n2 n3]{"src":"n4","dest":"n0","body":{"type":"broadcast","message":4,"msg_id":3}}
+Did you mean to encode this line as JSON? Or was this line intended for STDERR? See doc/protocol.md for more guidance.
+	at slingshot.support$stack_trace.invoke(support.clj:201)
+	at maelstrom.process$parse_msg$fn__15856.invoke(process.clj:47)
+	at maelstrom.process$parse_msg.invokeStatic(process.clj:45)
+	at maelstrom.process$parse_msg.invoke(process.clj:35)
+	at maelstrom.process$stdout_thread$fn__15878$fn__15879$fn__15881.invoke(process.clj:146)
+	at maelstrom.process$stdout_thread$fn__15878$fn__15879.invoke(process.clj:146)
+	at maelstrom.process$stdout_thread$fn__15878.invoke(process.clj:140)
+	at clojure.core$binding_conveyor_fn$fn__5823.invoke(core.clj:2047)
+	at clojure.lang.AFn.call(AFn.java:18)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1128)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:628)
+	at java.base/java.lang.Thread.run(Thread.java:829)
+2024-05-27 19:11:50,761{GMT}	INFO	[jepsen worker 0] jepsen.util: 0	:info	:broadcast	0	:net-timeout
+2024-05-27 19:11:50,763{GMT}	INFO	[jepsen worker 0] jepsen.util: 5	:invoke	:read	nil
+2024-05-27 19:11:50,861{GMT}	INFO	[jepsen worker 2] jepsen.util: 2	:info	:broadcast	1	:net-timeout
+2024-05-27 19:11:50,886{GMT}	INFO	[jepsen worker 2] jepsen.util: 7	:invoke	:broadcast	5
+2024-05-27 19:11:51,196{GMT}	INFO	[jepsen worker 1] jepsen.util: 1	:info	:broadcast	2	:net-timeout
+2024-05-27 19:11:51,198{GMT}	INFO	[jepsen worker 1] jepsen.util: 6	:invoke	:broadcast	6
+2024-05-27 19:11:51,366{GMT}	INFO	[jepsen worker 3] jepsen.util: 3	:info	:broadcast	3	:net-timeout
+2024-05-27 19:11:51,367{GMT}	INFO	[jepsen worker 3] jepsen.util: 8	:invoke	:read	nil
+2024-05-27 19:11:51,561{GMT}	INFO	[jepsen worker 4] jepsen.util: 4	:info	:broadcast	4	:net-timeout
+2024-05-27 19:11:51,562{GMT}	INFO	[jepsen worker 4] jepsen.util: 9	:invoke	:broadcast	7
+2024-05-27 19:11:55,764{GMT}	INFO	[jepsen worker 0] jepsen.util: 5	:fail	:read	nil	:net-timeout
+2024-05-27 19:11:55,765{GMT}	INFO	[jepsen worker 0] jepsen.util: 5	:invoke	:broadcast	8
+2024-05-27 19:11:55,887{GMT}	INFO	[jepsen worker 2] jepsen.util: 7	:info	:broadcast	5	:net-timeout
+2024-05-27 19:11:55,888{GMT}	INFO	[jepsen worker 2] jepsen.util: 12	:invoke	:broadcast	9
+2024-05-27 19:11:56,198{GMT}	INFO	[jepsen worker 1] jepsen.util: 6	:info	:broadcast	6	:net-timeout
+2024-05-27 19:11:56,199{GMT}	INFO	[jepsen worker 1] jepsen.util: 11	:invoke	:broadcast	10
+2024-05-27 19:11:56,367{GMT}	INFO	[jepsen worker 3] jepsen.util: 8	:fail	:read	nil	:net-timeout
+2024-05-27 19:11:56,390{GMT}	INFO	[jepsen worker 3] jepsen.util: 8	:invoke	:read	nil
+2024-05-27 19:11:56,562{GMT}	INFO	[jepsen worker 4] jepsen.util: 9	:info	:broadcast	7	:net-timeout
+2024-05-27 19:11:56,564{GMT}	INFO	[jepsen worker 4] jepsen.util: 14	:invoke	:broadcast	11
+2024-05-27 19:12:00,766{GMT}	INFO	[jepsen worker 0] jepsen.util: 5	:info	:broadcast	8	:net-timeout
+2024-05-27 19:12:00,770{GMT}	INFO	[jepsen worker 0] jepsen.util: 10	:invoke	:read	nil
+2024-05-27 19:12:00,888{GMT}	INFO	[jepsen worker 2] jepsen.util: 12	:info	:broadcast	9	:net-timeout
+2024-05-27 19:12:00,914{GMT}	INFO	[jepsen worker 2] jepsen.util: 17	:invoke	:read	nil
+2024-05-27 19:12:01,200{GMT}	INFO	[jepsen worker 1] jepsen.util: 11	:info	:broadcast	10	:net-timeout
+2024-05-27 19:12:01,204{GMT}	INFO	[jepsen worker 1] jepsen.util: 16	:invoke	:broadcast	12
+2024-05-27 19:12:01,394{GMT}	INFO	[jepsen worker 3] jepsen.util: 8	:fail	:read	nil	:net-timeout
+2024-05-27 19:12:01,396{GMT}	INFO	[jepsen worker 3] jepsen.util: 8	:invoke	:read	nil
+2024-05-27 19:12:01,565{GMT}	INFO	[jepsen worker 4] jepsen.util: 14	:info	:broadcast	11	:net-timeout
+2024-05-27 19:12:01,565{GMT}	INFO	[jepsen worker 4] jepsen.util: 19	:invoke	:broadcast	13
+2024-05-27 19:12:05,776{GMT}	INFO	[jepsen worker 0] jepsen.util: 10	:fail	:read	nil	:net-timeout
+2024-05-27 19:12:05,920{GMT}	INFO	[jepsen worker 2] jepsen.util: 17	:fail	:read	nil	:net-timeout
+2024-05-27 19:12:06,205{GMT}	INFO	[jepsen worker 1] jepsen.util: 16	:info	:broadcast	12	:net-timeout
+2024-05-27 19:12:06,397{GMT}	INFO	[jepsen worker 3] jepsen.util: 8	:fail	:read	nil	:net-timeout
+2024-05-27 19:12:06,565{GMT}	INFO	[jepsen worker 4] jepsen.util: 19	:info	:broadcast	13	:net-timeout
+2024-05-27 19:12:06,566{GMT}	INFO	[jepsen worker 2] jepsen.generator.interpreter: Waiting for recovery...
+2024-05-27 19:12:16,570{GMT}	INFO	[jepsen worker 1] jepsen.util: 21	:invoke	:read	nil
+2024-05-27 19:12:16,575{GMT}	INFO	[jepsen worker 2] jepsen.util: 17	:invoke	:read	nil
+2024-05-27 19:12:16,580{GMT}	INFO	[jepsen worker 3] jepsen.util: 8	:invoke	:read	nil
+2024-05-27 19:12:16,584{GMT}	INFO	[jepsen worker 4] jepsen.util: 24	:invoke	:read	nil
+2024-05-27 19:12:16,585{GMT}	INFO	[jepsen worker 0] jepsen.util: 10	:invoke	:read	nil
+2024-05-27 19:12:21,575{GMT}	INFO	[jepsen worker 2] jepsen.util: 17	:fail	:read	nil	:net-timeout
+2024-05-27 19:12:21,577{GMT}	INFO	[jepsen worker 1] jepsen.util: 21	:fail	:read	nil	:net-timeout
+2024-05-27 19:12:21,580{GMT}	INFO	[jepsen worker 3] jepsen.util: 8	:fail	:read	nil	:net-timeout
+2024-05-27 19:12:21,584{GMT}	INFO	[jepsen worker 4] jepsen.util: 24	:fail	:read	nil	:net-timeout
+2024-05-27 19:12:21,585{GMT}	INFO	[jepsen worker 0] jepsen.util: 10	:fail	:read	nil	:net-timeout
+2024-05-27 19:12:21,682{GMT}	INFO	[jepsen test runner] jepsen.core: Run complete, writing
+2024-05-27 19:12:21,896{GMT}	INFO	[jepsen node n0] maelstrom.db: Tearing down n0
+2024-05-27 19:12:21,902{GMT}	INFO	[jepsen node n1] maelstrom.db: Tearing down n1
+2024-05-27 19:12:21,916{GMT}	INFO	[jepsen node n2] maelstrom.db: Tearing down n2
+2024-05-27 19:12:21,946{GMT}	INFO	[jepsen node n4] maelstrom.db: Tearing down n4
+2024-05-27 19:12:21,961{GMT}	INFO	[jepsen node n3] maelstrom.db: Tearing down n3
+2024-05-27 19:12:23,587{GMT}	INFO	[jepsen node n0] maelstrom.net: Shutting down Maelstrom network
+2024-05-27 19:12:23,592{GMT}	INFO	[jepsen test runner] jepsen.core: Analyzing...
+2024-05-27 19:12:24,026{GMT}	INFO	[jepsen test runner] jepsen.core: Analysis complete
+2024-05-27 19:12:24,047{GMT}	INFO	[jepsen results] jepsen.store: Wrote /workspaces/Broadcast-System/broadcast-system/maelstrom/store/broadcast/20240527T191142.769Z/results.edn
+2024-05-27 19:12:24,166{GMT}	INFO	[jepsen test runner] jepsen.core: {:perf {:latency-graph {:valid? true},
+        :rate-graph {:valid? true},
+        :valid? true},
+ :timeline {:valid? true},
+ :exceptions {:valid? true},
+ :stats {:valid? false,
+         :count 31,
+         :ok-count 6,
+         :fail-count 11,
+         :info-count 14,
+         :by-f {:broadcast {:valid? false,
+                            :count 14,
+                            :ok-count 0,
+                            :fail-count 0,
+                            :info-count 14},
+                :read {:valid? true,
+                       :count 17,
+                       :ok-count 6,
+                       :fail-count 11,
+                       :info-count 0}}},
+ :availability {:valid? true, :ok-fraction 0.19354838},
+ :net {:all {:send-count 57,
+             :recv-count 57,
+             :msg-count 57,
+             :msgs-per-op 1.8387097},
+       :clients {:send-count 57, :recv-count 57, :msg-count 57},
+       :servers {:send-count 0,
+                 :recv-count 0,
+                 :msg-count 0,
+                 :msgs-per-op 0.0},
+       :valid? true},
+ :workload {:worst-stale (),
+            :duplicated-count 0,
+            :valid? :unknown,
+            :lost-count 0,
+            :lost (),
+            :stable-count 0,
+            :stale-count 0,
+            :stale (),
+            :never-read-count 14,
+            :attempt-count 14,
+            :never-read (0 1 2 3 4 5 6 7 8 9 10 11 12 13),
+            :duplicated {}},
+ :valid? false}
+
+
+Analysis invalid! (ﾉಥ益ಥ）ﾉ ┻━┻

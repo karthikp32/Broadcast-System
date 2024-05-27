@@ -1,0 +1,21 @@
+2024/05/27 19:11:45 Received {c3 n3 {"type":"init","node_id":"n3","node_ids":["n0","n1","n2","n3","n4"],"msg_id":1}}
+2024/05/27 19:11:45 Node n3 initialized
+2024/05/27 19:11:45 Sent {"src":"n3","dest":"c3","body":{"in_reply_to":1,"type":"init_ok"}}
+2024/05/27 19:11:45 Received {c8 n3 {"type":"topology","topology":{"n0":["n3","n1"],"n1":["n4","n2","n0"],"n2":["n1"],"n3":["n0","n4"],"n4":["n1","n3"]},"msg_id":1}}
+2024/05/27 19:11:45 Sent {"src":"n3","dest":"c8","body":{"in_reply_to":1,"type":"topology_ok"}}
+2024/05/27 19:11:45 Received {c13 n3 {"type":"read","msg_id":1}}
+2024/05/27 19:11:45 Sent {"src":"n3","dest":"c13","body":{"in_reply_to":1,"messages":null,"msg_id":1,"type":"read_ok"}}
+2024/05/27 19:11:46 Received {c13 n3 {"type":"broadcast","message":3,"msg_id":2}}
+2024/05/27 19:11:46 Sent {"src":"n3","dest":"n0","body":{"type":"broadcast","message":3,"msg_id":2}}
+2024/05/27 19:11:46 Sent {"src":"n3","dest":"n1","body":{"type":"broadcast","message":3,"msg_id":2}}
+2024/05/27 19:11:46 Sent {"src":"n3","dest":"n2","body":{"type":"broadcast","message":3,"msg_id":2}}
+2024/05/27 19:11:46 Sent {"src":"n3","dest":"n4","body":{"type":"broadcast","message":3,"msg_id":2}}
+2024/05/27 19:11:46 Sent {"src":"n3","dest":"c13","body":{"in_reply_to":2,"type":"broadcast_ok"}}
+2024/05/27 19:11:51 Received {c18 n3 {"type":"read","msg_id":1}}
+2024/05/27 19:11:51 Sent {"src":"n3","dest":"c18","body":{"in_reply_to":1,"messages":[3],"msg_id":1,"type":"read_ok"}}
+2024/05/27 19:11:56 Received {c18 n3 {"type":"read","msg_id":2}}
+2024/05/27 19:11:56 Sent {"src":"n3","dest":"c18","body":{"in_reply_to":2,"messages":[3],"msg_id":2,"type":"read_ok"}}
+2024/05/27 19:12:01 Received {c18 n3 {"type":"read","msg_id":3}}
+2024/05/27 19:12:01 Sent {"src":"n3","dest":"c18","body":{"in_reply_to":3,"messages":[3],"msg_id":3,"type":"read_ok"}}
+2024/05/27 19:12:16 Received {c18 n3 {"type":"read","msg_id":4}}
+2024/05/27 19:12:16 Sent {"src":"n3","dest":"c18","body":{"in_reply_to":4,"messages":[3],"msg_id":4,"type":"read_ok"}}

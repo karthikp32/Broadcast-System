@@ -1,0 +1,14 @@
+2024/05/27 19:46:21 Received {c4 n1 {"type":"init","node_id":"n1","node_ids":["n0","n1","n2","n3","n4"],"msg_id":1}}
+2024/05/27 19:46:21 Node n1 initialized
+2024/05/27 19:46:21 Sent {"src":"n1","dest":"c4","body":{"in_reply_to":1,"type":"init_ok"}}
+2024/05/27 19:46:21 Received {c7 n1 {"type":"topology","topology":{"n0":["n3","n1"],"n1":["n4","n2","n0"],"n2":["n1"],"n3":["n0","n4"],"n4":["n1","n3"]},"msg_id":1}}
+2024/05/27 19:46:21 Sent {"src":"n1","dest":"c7","body":{"in_reply_to":1,"type":"topology_ok"}}
+2024/05/27 19:46:22 Received {c11 n1 {"type":"broadcast","message":0,"msg_id":1}}
+2024/05/27 19:46:22 Sent {"src":"n1","dest":"n0","body":{"message":0,"type":"second-order-broadcast"}}
+2024/05/27 19:46:22 Sent {"src":"n1","dest":"n4","body":{"message":0,"type":"second-order-broadcast"}}
+2024/05/27 19:46:22 Sent {"src":"n1","dest":"n2","body":{"message":0,"type":"second-order-broadcast"}}
+2024/05/27 19:46:22 Sent {"src":"n1","dest":"n3","body":{"message":0,"type":"second-order-broadcast"}}
+2024/05/27 19:46:22 Sent {"src":"n1","dest":"n4","body":{"message":0,"type":"second-order-broadcast"}}
+2024/05/27 19:46:22 Sent {"src":"n1","dest":"c11","body":{"in_reply_to":1,"type":"broadcast_ok"}}
+2024/05/27 19:46:22 Received {n0 n1 {"in_reply_to":0,"type":"second_order_broadcast_ok"}}
+2024/05/27 19:46:22 No handler for {"id":29,"src":"n0","dest":"n1","body":{"in_reply_to":0,"type":"second_order_broadcast_ok"}}
