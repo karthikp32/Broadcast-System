@@ -14,14 +14,15 @@ var neighborNodes []string
 
 
 
-func broadcast(n *maelstrom.Node) {
+
+func broadcast(n *maelstrom.Node, neighborNodeToSecondOrderBroadcastMap map[string][]string) {
 	n.Handle("broadcast", func(msg maelstrom.Message) error {
 		var requestBody map[string]any
 		responseBody := make(map[string]any)
 		if err := json.Unmarshal(msg.Body, &requestBody); err != nil {
 			return err
 		}
-		secondOrderbroadcastMessageToNeighborNodes(n, requestBody)
+		secondOrderbroadcastMessageToNeighborNodes(n, requestBody, neighborNodeToSecondOrderBroadcastMap)
 		responseBody["type"] = "broadcast_ok"
 		broadcastedValues = append(broadcastedValues, requestBody["message"])
 		return n.Reply(msg, responseBody)
@@ -29,7 +30,7 @@ func broadcast(n *maelstrom.Node) {
 }
 
 
-func secondOrderbroadcastMessageToNeighborNodes(n *maelstrom.Node, requestBody map[string]any) {
+func secondOrderbroadcastMessageToNeighborNodes(n *maelstrom.Node, requestBody map[string]any, neighborNodeToSecondOrderBroadcastMap map[string][]string) {
 	secondOrderRequestBody := make(map[string]any)
 	secondOrderRequestBody["type"] = "second-order-broadcast"
 	secondOrderRequestBody["message"] = requestBody["message"]
@@ -37,6 +38,7 @@ func secondOrderbroadcastMessageToNeighborNodes(n *maelstrom.Node, requestBody m
 	neighborNodes = removeCurrNodeFromNeighborNodes(neighborNodes, n)
 	for _, neighborNode := range neighborNodes {
 		n.Send(neighborNode, secondOrderRequestBody)
+		neighborNodeToSecondOrderBroadcastMap[neighborNode] = append(neighborNodeToSecondOrderBroadcastMap[neighborNode], secondOrderRequestBody["message"].(string))
 	}
 }
 
@@ -53,7 +55,7 @@ func secondOrderBroadcast(n *maelstrom.Node) {
 	})
 }
 
-func secondOrderBroadcastOk(n *maelstrom.Node) {
+func secondOrderBroadcastOk(n *maelstrom.Node, neighborNodeToSecondOrderBroadcastMap map[string][]string) {
 	n.Handle("second_order_broadcast_ok", func(msg maelstrom.Message) error {
 		var requestBody map[string]any
 		if err := json.Unmarshal(msg.Body, &requestBody); err != nil {
@@ -113,10 +115,14 @@ func main() {
 	n := maelstrom.NewNode()
 	removeCurrNodeFromNeighborNodes_unitTest(n)
 
+	neighborNodeToSecondOrderBroadcastMap := make(map[string][]string)
+	neighborNodeToSecondOrderBroadcastOkMap := make(map[string][]string)
+
+
 	topology(n)
-	broadcast(n)
+	broadcast(n, neighborNodeToSecondOrderBroadcastMap)
 	secondOrderBroadcast(n)
-	secondOrderBroadcastOk(n)
+	secondOrderBroadcastOk(n, neighborNodeToSecondOrderBroadcastOkMap)
 	read(n)
 
 
