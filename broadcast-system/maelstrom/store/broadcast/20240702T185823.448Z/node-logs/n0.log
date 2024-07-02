@@ -1,0 +1,24 @@
+2024/07/02 18:58:26 Received {c2 n0 {"type":"init","node_id":"n0","node_ids":["n0","n1","n2","n3","n4"],"msg_id":1}}
+2024/07/02 18:58:26 Node n0 initialized
+2024/07/02 18:58:26 Sent {"src":"n0","dest":"c2","body":{"in_reply_to":1,"type":"init_ok"}}
+2024/07/02 18:58:26 Received {c5 n0 {"type":"topology","topology":{"n0":["n3","n1"],"n1":["n4","n2","n0"],"n2":["n1"],"n3":["n0","n4"],"n4":["n1","n3"]},"msg_id":1}}
+2024/07/02 18:58:26 Sent {"src":"n0","dest":"c5","body":{"in_reply_to":1,"type":"topology_ok"}}
+2024/07/02 18:58:26 Received {n3 n0 {"message":0,"type":"second-order-broadcast"}}
+2024/07/02 18:58:26 Sent {"src":"n0","dest":"n3","body":{"in_reply_to":0,"node":"n0","type":"second_order_broadcast_ok"}}
+2024/07/02 18:58:26 Received {c14 n0 {"type":"read","msg_id":1}}
+2024/07/02 18:58:26 Sent {"src":"n0","dest":"c14","body":{"in_reply_to":1,"messages":[0],"msg_id":1,"type":"read_ok"}}
+2024/07/02 18:58:26 Received {c14 n0 {"type":"broadcast","message":1,"msg_id":2}}
+2024/07/02 18:58:26 Sent {"src":"n0","dest":"n4","body":{"message":1,"type":"second-order-broadcast"}}
+panic: interface conversion: interface {} is float64, not string
+
+goroutine 9 [running]:
+main.secondOrderbroadcastMessageToNeighborNodes(0xc00007e000, 0xc0000a4600, 0xc000076150)
+	/workspaces/Broadcast-System/broadcast-system/main.go:41 +0x49d
+main.main.broadcast.func2({{0xc0000124c8, 0x3}, {0xc0000124cc, 0x2}, {0xc000020420, 0x2b, 0x30}})
+	/workspaces/Broadcast-System/broadcast-system/main.go:25 +0xcb
+github.com/jepsen-io/maelstrom/demo/go.(*Node).handleMessage(0xc00007e000, 0x0?, {{0xc0000124c8, 0x3}, {0xc0000124cc, 0x2}, {0xc000020420, 0x2b, 0x30}})
+	/go/pkg/mod/github.com/jepsen-io/maelstrom/demo/go@v0.0.0-20240408130303-0186f398f965/node.go:151 +0x8d
+github.com/jepsen-io/maelstrom/demo/go.(*Node).Run.func2()
+	/go/pkg/mod/github.com/jepsen-io/maelstrom/demo/go@v0.0.0-20240408130303-0186f398f965/node.go:129 +0x7d
+created by github.com/jepsen-io/maelstrom/demo/go.(*Node).Run in goroutine 1
+	/go/pkg/mod/github.com/jepsen-io/maelstrom/demo/go@v0.0.0-20240408130303-0186f398f965/node.go:127 +0x4f8

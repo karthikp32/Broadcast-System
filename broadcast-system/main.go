@@ -1,12 +1,13 @@
 package main
 
 import (
-	"log"
 	"encoding/json"
-	maelstrom "github.com/jepsen-io/maelstrom/demo/go"
+	"fmt"
+	"log"
 	"slices"
 	"strings"
-	"fmt"
+
+	maelstrom "github.com/jepsen-io/maelstrom/demo/go"
 )
 
 var broadcastedValues []any
@@ -15,7 +16,7 @@ var neighborNodes []string
 
 
 
-func broadcast(n *maelstrom.Node, neighborNodeToSecondOrderBroadcastMap map[string][]string) {
+func broadcast(n *maelstrom.Node, neighborNodeToSecondOrderBroadcastMap map[string][]any) {
 	n.Handle("broadcast", func(msg maelstrom.Message) error {
 		var requestBody map[string]any
 		responseBody := make(map[string]any)
@@ -30,7 +31,7 @@ func broadcast(n *maelstrom.Node, neighborNodeToSecondOrderBroadcastMap map[stri
 }
 
 
-func secondOrderbroadcastMessageToNeighborNodes(n *maelstrom.Node, requestBody map[string]any, neighborNodeToSecondOrderBroadcastMap map[string][]string) {
+func secondOrderbroadcastMessageToNeighborNodes(n *maelstrom.Node, requestBody map[string]any, neighborNodeToSecondOrderBroadcastMap map[string][]any) {
 	secondOrderRequestBody := make(map[string]any)
 	secondOrderRequestBody["type"] = "second-order-broadcast"
 	secondOrderRequestBody["message"] = requestBody["message"]
@@ -38,7 +39,7 @@ func secondOrderbroadcastMessageToNeighborNodes(n *maelstrom.Node, requestBody m
 	neighborNodes = removeCurrNodeFromNeighborNodes(neighborNodes, n)
 	for _, neighborNode := range neighborNodes {
 		n.Send(neighborNode, secondOrderRequestBody)
-		neighborNodeToSecondOrderBroadcastMap[neighborNode] = append(neighborNodeToSecondOrderBroadcastMap[neighborNode], secondOrderRequestBody["message"].(string))
+		neighborNodeToSecondOrderBroadcastMap[neighborNode] = append(neighborNodeToSecondOrderBroadcastMap[neighborNode], secondOrderRequestBody["message"])
 	}
 }
 
@@ -49,6 +50,7 @@ func secondOrderBroadcast(n *maelstrom.Node) {
 		if err := json.Unmarshal(msg.Body, &requestBody); err != nil {
 			return err
 		}
+		responseBody["node"] = n.ID()
 		responseBody["type"] = "second_order_broadcast_ok"
 		broadcastedValues = append(broadcastedValues, requestBody["message"])
 		return n.Reply(msg, responseBody)
@@ -115,7 +117,7 @@ func main() {
 	n := maelstrom.NewNode()
 	removeCurrNodeFromNeighborNodes_unitTest(n)
 
-	neighborNodeToSecondOrderBroadcastMap := make(map[string][]string)
+	neighborNodeToSecondOrderBroadcastMap := make(map[string][]any)
 	neighborNodeToSecondOrderBroadcastOkMap := make(map[string][]string)
 
 

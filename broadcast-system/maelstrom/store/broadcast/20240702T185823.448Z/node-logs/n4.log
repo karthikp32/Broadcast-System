@@ -1,0 +1,22 @@
+2024/07/02 18:58:26 Received {c1 n4 {"type":"init","node_id":"n4","node_ids":["n0","n1","n2","n3","n4"],"msg_id":1}}
+2024/07/02 18:58:26 Node n4 initialized
+2024/07/02 18:58:26 Sent {"src":"n4","dest":"c1","body":{"in_reply_to":1,"type":"init_ok"}}
+2024/07/02 18:58:26 Received {c9 n4 {"type":"topology","topology":{"n0":["n3","n1"],"n1":["n4","n2","n0"],"n2":["n1"],"n3":["n0","n4"],"n4":["n1","n3"]},"msg_id":1}}
+2024/07/02 18:58:26 Sent {"src":"n4","dest":"c9","body":{"in_reply_to":1,"type":"topology_ok"}}
+2024/07/02 18:58:26 Received {c13 n4 {"type":"read","msg_id":1}}
+2024/07/02 18:58:26 Sent {"src":"n4","dest":"c13","body":{"in_reply_to":1,"messages":null,"msg_id":1,"type":"read_ok"}}
+2024/07/02 18:58:27 Received {c13 n4 {"type":"broadcast","message":2,"msg_id":2}}
+2024/07/02 18:58:27 Sent {"src":"n4","dest":"n0","body":{"message":2,"type":"second-order-broadcast"}}
+panic: interface conversion: interface {} is float64, not string
+
+goroutine 21 [running]:
+main.secondOrderbroadcastMessageToNeighborNodes(0xc0000a8000, 0xc0001004e0, 0xc000098150)
+	/workspaces/Broadcast-System/broadcast-system/main.go:41 +0x49d
+main.main.broadcast.func2({{0xc00009a380, 0x3}, {0xc00009a384, 0x2}, {0xc0000d4000, 0x2b, 0x30}})
+	/workspaces/Broadcast-System/broadcast-system/main.go:25 +0xcb
+github.com/jepsen-io/maelstrom/demo/go.(*Node).handleMessage(0xc0000a8000, 0x0?, {{0xc00009a380, 0x3}, {0xc00009a384, 0x2}, {0xc0000d4000, 0x2b, 0x30}})
+	/go/pkg/mod/github.com/jepsen-io/maelstrom/demo/go@v0.0.0-20240408130303-0186f398f965/node.go:151 +0x8d
+github.com/jepsen-io/maelstrom/demo/go.(*Node).Run.func2()
+	/go/pkg/mod/github.com/jepsen-io/maelstrom/demo/go@v0.0.0-20240408130303-0186f398f965/node.go:129 +0x7d
+created by github.com/jepsen-io/maelstrom/demo/go.(*Node).Run in goroutine 1
+	/go/pkg/mod/github.com/jepsen-io/maelstrom/demo/go@v0.0.0-20240408130303-0186f398f965/node.go:127 +0x4f8
